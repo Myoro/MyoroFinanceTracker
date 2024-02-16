@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:myoro_finance_tracker/widgets/buttons/button_without_feedback.dart';
+import 'package:myoro_finance_tracker/widgets/buttons/icon_button_without_feedback.dart';
 
 /// [Widget] in which all tables will be created from
-class BaseTable<T> extends StatelessWidget {
+class BaseTable<T> extends StatefulWidget {
   final List<String> titleRow;
 
   /// Table rows/data
@@ -18,37 +20,122 @@ class BaseTable<T> extends StatelessWidget {
   });
 
   @override
+  State<BaseTable<T>> createState() => _BaseTableState<T>();
+}
+
+class _BaseTableState<T> extends State<BaseTable<T>> {
+  final ValueNotifier<int> _pageNumber = ValueNotifier<int>(1);
+
+  @override
+  void dispose() {
+    _pageNumber.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return Table(
-      children: [
-        TableRow(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.onPrimary,
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(10),
-              topRight: const Radius.circular(10),
-              bottomLeft: rows.isEmpty ? const Radius.circular(10) : Radius.zero,
-              bottomRight: rows.isEmpty ? const Radius.circular(10) : Radius.zero,
-            ),
-          ),
-          children: [
-            for (final String column in titleRow)
-              Padding(
-                padding: const EdgeInsets.all(5),
-                child: Text(
-                  column,
-                  textAlign: TextAlign.center,
-                  style: theme.textTheme.titleMedium!.copyWith(
-                    color: theme.colorScheme.primary,
+    return ValueListenableBuilder(
+        valueListenable: _pageNumber,
+        builder: (context, pageNumber, child) {
+          final int pageNumberStartingIndex = (pageNumber - 1) * 10 - 1 != -1 ? (pageNumber - 1) * 10 : 0;
+
+          return Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: theme.colorScheme.onPrimary,
+                    width: 2,
                   ),
                 ),
+                child: Table(
+                  children: [
+                    TableRow(
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.onPrimary,
+                        borderRadius: BorderRadius.only(
+                          topLeft: const Radius.circular(5),
+                          topRight: const Radius.circular(5),
+                          bottomLeft: widget.rows.isEmpty ? const Radius.circular(5) : Radius.zero,
+                          bottomRight: widget.rows.isEmpty ? const Radius.circular(5) : Radius.zero,
+                        ),
+                      ),
+                      children: [for (final String column in widget.titleRow) _TitleColumn(column)],
+                    ),
+                    for (int i = pageNumberStartingIndex; i < pageNumberStartingIndex + 10; i++)
+                      if (i <= widget.rows.length - 1) widget.builder(widget.rows[i]),
+                  ],
+                ),
               ),
-          ],
-        ),
-        for (final T row in rows) builder(row)
-      ],
+              if (widget.rows.length > 10) ...[
+                const SizedBox(height: 5),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButtonWithoutFeedback(
+                      icon: Icons.arrow_left,
+                      size: 30,
+                      onTap: () {
+                        if (pageNumber > 1 && pageNumber <= widget.rows.length ~/ 10) {
+                          _pageNumber.value -= 1;
+                        }
+                      },
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 1),
+                      child: Text(
+                        pageNumber.toString(),
+                        style: theme.textTheme.bodyMedium,
+                      ),
+                    ),
+                    IconButtonWithoutFeedback(
+                      icon: Icons.arrow_right,
+                      size: 30,
+                      onTap: () {
+                        if (pageNumber < widget.rows.length ~/ 10) {
+                          _pageNumber.value += 1;
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          );
+        });
+  }
+}
+
+class _TitleColumn extends StatelessWidget {
+  final String text;
+
+  const _TitleColumn(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
+    return ButtonWithoutFeedback(
+      onTap: () {}, // TODO: Filter
+      child: Wrap(
+        spacing: 5,
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          Text(
+            text,
+            style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.primary),
+          ),
+          Icon(
+            Icons.filter_alt,
+            size: 20,
+            color: theme.colorScheme.primary,
+          ),
+        ],
+      ),
     );
   }
 }
