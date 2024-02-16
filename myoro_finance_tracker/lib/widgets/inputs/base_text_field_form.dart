@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myoro_finance_tracker/enums/size_enum.dart';
 import 'package:myoro_finance_tracker/widgets/inputs/base_text_field.dart';
 
@@ -16,6 +17,9 @@ class BaseTextFieldForm extends StatelessWidget {
   /// (Optional) Width of title [Text]
   final double? titleWidth;
 
+  /// (Optional) Input formatters of [TextField] in [BaseTextField]
+  final List<TextInputFormatter> formatters;
+
   /// (Optional) Focus node of [TextField] in [BaseTextField]
   final FocusNode? focusNode;
 
@@ -27,6 +31,7 @@ class BaseTextFieldForm extends StatelessWidget {
     required this.title,
     required this.textFieldWidth,
     required this.controller,
+    this.formatters = const [],
     this.focusNode,
     this.size = SizeEnum.medium,
     this.titleWidth,
@@ -54,6 +59,7 @@ class BaseTextFieldForm extends StatelessWidget {
         width: textFieldWidth,
         controller: controller,
         focusNode: focusNode,
+        formatters: formatters,
       ),
     ],
   );

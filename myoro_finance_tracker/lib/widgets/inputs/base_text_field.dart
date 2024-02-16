@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:myoro_finance_tracker/enums/size_enum.dart';
 
 /// Widget that replaces [TextField] in our application
@@ -9,6 +10,9 @@ class BaseTextField extends StatelessWidget {
   /// (Optional) Widget of [BaseTextField]
   final double? width;
 
+  /// (Optional) List of input formatters that [TextField] will use
+  final List<TextInputFormatter> formatters;
+
   /// (Optional) [FocusNode] of [TextField]
   final FocusNode? focusNode;
 
@@ -18,6 +22,7 @@ class BaseTextField extends StatelessWidget {
   const BaseTextField({
     super.key,
     required this.controller,
+    this.formatters = const [],
     this.focusNode,
     this.size = SizeEnum.medium,
     this.width,
@@ -56,6 +61,7 @@ class BaseTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         focusNode: focusNode,
+        inputFormatters: formatters,
         style: textStyle,
         textAlign: TextAlign.center,
         decoration: InputDecoration(

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:myoro_finance_tracker/blocs/finances_cubit.dart';
+import 'package:myoro_finance_tracker/formatters/date_formatter.dart';
+import 'package:myoro_finance_tracker/formatters/price_formatter.dart';
 import 'package:myoro_finance_tracker/models/finance_model.dart';
 import 'package:myoro_finance_tracker/widgets/app_bars/home_screen_app_bar.dart';
 import 'package:myoro_finance_tracker/widgets/inputs/base_text_field_form.dart';
@@ -79,12 +81,14 @@ class _FinanceFormModalState extends State<FinanceFormModal> {
               title: '\$ Spent',
               titleWidth: _titleWidth,
               textFieldWidth: _textFieldWidth,
+              formatters: [PriceFormatter()],
             ),
             BaseTextFieldForm(
               controller: _dateController,
               title: 'Date',
               titleWidth: _titleWidth,
               textFieldWidth: _textFieldWidth,
+              formatters: [DateFormatter()],
             ),
           ],
         ),
