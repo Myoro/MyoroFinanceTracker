@@ -20,6 +20,16 @@ class Database {
     // Dark mode table
     await _database.execute('CREATE TABLE IF NOT EXISTS dark_mode(id INTEGER PRIMARY KEY, enabled INTEGER);');
     if ((await get('dark_mode')).isEmpty) insert('dark_mode', {'enabled': 1});
+
+    // Finances cubit
+    await _database.execute('''
+      CREATE TABLE IF NOT EXISTS finances(
+        id    INTEGER PRIMARY KEY AUTOINCREMENT,
+        name  TEXT,
+        spent TEXT,
+        date  TEXT
+      );
+    ''');
   }
 
   static Future<List<Map<String, Object?>>> select(

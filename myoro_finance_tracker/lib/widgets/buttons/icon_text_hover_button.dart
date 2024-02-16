@@ -62,6 +62,7 @@ class _IconTextHoverButtonState extends State<IconTextHoverButton> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 if (widget.icon != null)
                   Icon(

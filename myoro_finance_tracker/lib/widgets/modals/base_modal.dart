@@ -76,23 +76,30 @@ class BaseModal extends StatelessWidget {
                   ],
                 ),
                 content,
-                if (showFooterButtons)
+                if (showFooterButtons)...[
+                  const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      IconTextHoverButton(
-                        onTap: () => yesOnTap!(),
-                        text: yesText,
-                        bordered: true,
+                      Expanded(
+                        child: IconTextHoverButton(
+                          onTap: () => yesOnTap!(),
+                          text: yesText,
+                          bordered: true,
+                        ),
                       ),
                       const SizedBox(width: 10),
-                      IconTextHoverButton(
-                        onTap: () => Navigator.pop(context),
-                        text: 'Cancel',
-                        bordered: true,
+                      Expanded(
+                        child: IconTextHoverButton(
+                          onTap: () => Navigator.pop(context),
+                          text: 'Cancel',
+                          bordered: true,
+                        ),
                       ),
                     ],
                   ),
+                ],
+                const SizedBox(height: 5),
               ],
             ),
           ),
