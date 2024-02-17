@@ -4,6 +4,7 @@ import 'package:myoro_finance_tracker/widgets/buttons/icon_button_without_feedba
 
 /// [Widget] in which all tables will be created from
 class BaseTable<T> extends StatefulWidget {
+  /// [String]s containing each column of the title row
   final List<String> titleRow;
 
   /// Table rows/data
@@ -12,11 +13,15 @@ class BaseTable<T> extends StatefulWidget {
   /// [TableRow] builder
   final TableRow Function(T) builder;
 
+  /// (Optional) [Map] of specific columns to have a specific width
+  final Map<int, TableColumnWidth>? columnWidths;
+
   const BaseTable({
     super.key,
     required this.titleRow,
     required this.rows,
     required this.builder,
+    this.columnWidths,
   });
 
   @override
@@ -52,6 +57,7 @@ class _BaseTableState<T> extends State<BaseTable<T>> {
                   ),
                 ),
                 child: Table(
+                  columnWidths: widget.columnWidths,
                   children: [
                     TableRow(
                       decoration: BoxDecoration(
@@ -129,11 +135,12 @@ class _TitleColumn extends StatelessWidget {
             text,
             style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.primary),
           ),
-          Icon(
-            Icons.filter_alt,
-            size: 20,
-            color: theme.colorScheme.primary,
-          ),
+          if (text.isNotEmpty)
+            Icon(
+              Icons.filter_alt,
+              size: 20,
+              color: theme.colorScheme.primary,
+            ),
         ],
       ),
     );

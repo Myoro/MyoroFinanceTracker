@@ -14,8 +14,25 @@ class FinanceModel {
   });
 
   FinanceModel.fromJSON(Map<String, dynamic> json)
-    : id = json['id'],
-      name = json['name'],
-      spent = json['spent'],
-      date = DateFormat('dd/MM/yyyy').parse(json['date']);
+      : id = json['id'],
+        name = json['name'],
+        spent = double.parse(json['spent']),
+        date = DateFormat('dd/MM/yyyy').parse(json['date']);
+
+  Map<String, Object?> get toJSON => {
+        'id': id,
+        'name': name,
+        'spent': spent,
+        'date': DateFormat('dd/MM/yyyy').format(date),
+      };
+
+  @override
+  String toString() => '''
+    FinanceModel(
+      id: $id,
+      name: $name,
+      spent: $spent,
+      date: ${DateFormat('dd/MM/yyyy').format(date)},
+    );
+  ''';
 }

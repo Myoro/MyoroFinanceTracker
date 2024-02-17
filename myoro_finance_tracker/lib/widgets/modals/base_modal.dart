@@ -76,7 +76,7 @@ class BaseModal extends StatelessWidget {
                   ],
                 ),
                 content,
-                if (showFooterButtons)...[
+                if (showFooterButtons) ...[
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

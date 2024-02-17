@@ -14,6 +14,9 @@ class BaseTextFieldForm extends StatelessWidget {
   /// Width of [BaseTextField]
   final double textFieldWidth;
 
+  /// If [BaseTextFieldForm] is obligatory, will show a * next to the title
+  final bool obligatory;
+
   /// (Optional) Width of title [Text]
   final double? titleWidth;
 
@@ -31,6 +34,7 @@ class BaseTextFieldForm extends StatelessWidget {
     required this.title,
     required this.textFieldWidth,
     required this.controller,
+    this.obligatory = false,
     this.formatters = const [],
     this.focusNode,
     this.size = SizeEnum.medium,
@@ -39,28 +43,28 @@ class BaseTextFieldForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children: [
-      SizedBox(
-        width: titleWidth,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: Text(
-            '$title:',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          SizedBox(
+            width: titleWidth,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 4),
+              child: Text(
+                '$title:${obligatory ? ' *' : ''}',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
           ),
-        ),
-      ),
-      const SizedBox(width: 10),
-      BaseTextField(
-        size: size,
-        width: textFieldWidth,
-        controller: controller,
-        focusNode: focusNode,
-        formatters: formatters,
-      ),
-    ],
-  );
+          const SizedBox(width: 10),
+          BaseTextField(
+            size: size,
+            width: textFieldWidth,
+            controller: controller,
+            focusNode: focusNode,
+            formatters: formatters,
+          ),
+        ],
+      );
 }

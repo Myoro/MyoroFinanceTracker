@@ -40,7 +40,7 @@ class BaseTextField extends StatelessWidget {
       ),
     );
 
-    switch(size) {
+    switch (size) {
       case SizeEnum.small:
         textStyle = theme.textTheme.bodySmall!;
         height = 36;
