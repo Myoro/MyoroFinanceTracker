@@ -20,7 +20,7 @@ class FinanceModel {
         date = DateFormat('dd/MM/yyyy').parse(json['date']);
 
   Map<String, Object?> get toJSON => {
-        'id': id,
+        // 'id': id, TODO: Commented because we don't want to show the id making database calls
         'name': name,
         'spent': spent,
         'date': DateFormat('dd/MM/yyyy').format(date),

@@ -7,13 +7,20 @@ class FinancesCubit extends Cubit<List<FinanceModel>> {
 
   void add(FinanceModel finance) async {
     await Database.insert('finances', finance.toJSON);
-
-    final List<FinanceModel> finances = (await Database.select('finances')).map((json) => FinanceModel.fromJSON(json)).toList();
-    final FinanceModel financeWithId = finances.last;
-
-    emit(state..add(financeWithId));
+    final FinanceModel result = FinanceModel.fromJSON(await Database.get('finances', finance.toJSON));
+    emit(state..add(result));
   }
 
-  // TODO: Remove from database
-  void remove(FinanceModel finance) => emit(state..remove(finance));
+  void update(FinanceModel oldFinance, FinanceModel newFinance) async {
+    await Database.update('finances', newFinance.toJSON, oldFinance.toJSON);
+    final FinanceModel result = FinanceModel.fromJSON(await Database.get('finances', newFinance.toJSON));
+    final List<FinanceModel> finances = List.from(state);
+    finances[finances.indexOf(oldFinance)] = result;
+    emit(finances);
+  }
+
+  void remove(FinanceModel finance) async {
+    await Database.delete('finances', finance.toJSON);
+    emit(state..remove(finance));
+  }
 }

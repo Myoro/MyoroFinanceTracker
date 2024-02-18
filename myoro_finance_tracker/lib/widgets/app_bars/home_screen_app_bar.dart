@@ -4,6 +4,7 @@ import 'package:myoro_finance_tracker/blocs/dark_mode_cubit.dart';
 import 'package:myoro_finance_tracker/widgets/buttons/icon_button_without_feedback.dart';
 import 'package:myoro_finance_tracker/widgets/modals/finance_form_modal.dart';
 import 'package:myoro_finance_tracker/widgets/screens/home_screen.dart';
+import 'package:myoro_finance_tracker/widgets/screens/income_screen.dart';
 
 /// [AppBar] of [HomeScreen]
 class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -25,6 +26,16 @@ class HomeScreenAppBar extends StatelessWidget implements PreferredSizeWidget {
               icon: Icons.add,
               size: 40,
               onTap: () => FinanceFormModal.show(context),
+            ),
+            IconButtonWithoutFeedback(
+              icon: Icons.paid_outlined,
+              size: 40,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const IncomeScreen(),
+                ),
+              ),
             ),
             IconButtonWithoutFeedback(
               icon: Icons.sunny,

@@ -14,12 +14,14 @@ import 'package:myoro_finance_tracker/widgets/modals/base_modal.dart';
 ///
 /// Used in [HomeScreenAppBar]
 class FinanceFormModal extends StatefulWidget {
-  const FinanceFormModal({super.key});
+  final FinanceModel? finance;
 
-  static void show(BuildContext context) => showDialog(
+  const FinanceFormModal({super.key, this.finance});
+
+  static void show(BuildContext context, [FinanceModel? finance]) => showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const FinanceFormModal(),
+        builder: (context) => FinanceFormModal(finance: finance),
       );
 
   @override
@@ -35,18 +37,39 @@ class _FinanceFormModalState extends State<FinanceFormModal> {
   final FocusNode _nameFocusNode = FocusNode();
   final ValueNotifier<bool> _showMessage = ValueNotifier<bool>(false);
 
-  void _createFinance() {
-    if (_spentController.text.isEmpty) {
-      _showMessage.value = true;
-      Future.delayed(const Duration(milliseconds: 1500), () => _showMessage.value = false);
-      return;
-    }
+  bool _formValidation() {
+    if (_spentController.text.isNotEmpty) return true;
 
-    BlocProvider.of<FinancesCubit>(context).add(FinanceModel(
-      name: _nameController.text,
-      spent: PriceHelper.formatPrice(_spentController.text),
-      date: _dateController.text.length < 10 ? DateTime.now() : DateFormat('dd/MM/yyyy').parse(_dateController.text),
-    ));
+    _showMessage.value = true;
+    Future.delayed(const Duration(milliseconds: 1500), () => _showMessage.value = false);
+    return false;
+  }
+
+  void _createFinance() {
+    if (!_formValidation()) return;
+
+    BlocProvider.of<FinancesCubit>(context).add(
+      FinanceModel(
+        name: _nameController.text,
+        spent: PriceHelper.formatPriceToDouble(_spentController.text),
+        date: _dateController.text.length < 10 ? DateTime.now() : DateFormat('dd/MM/yyyy').parse(_dateController.text),
+      ),
+    );
+
+    Navigator.pop(context);
+  }
+
+  void _updateFinance() {
+    if (!_formValidation()) return;
+
+    BlocProvider.of<FinancesCubit>(context).update(
+      widget.finance!,
+      FinanceModel(
+        name: _nameController.text,
+        spent: PriceHelper.formatPriceToDouble(_spentController.text),
+        date: _dateController.text.length < 10 ? DateTime.now() : DateFormat('dd/MM/yyyy').parse(_dateController.text),
+      ),
+    );
 
     Navigator.pop(context);
   }
@@ -54,6 +77,14 @@ class _FinanceFormModalState extends State<FinanceFormModal> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.finance != null) {
+      _nameController.text = widget.finance!.name ?? '';
+      final List<String> split = widget.finance!.spent.toStringAsFixed(2).split('.');
+      _spentController.text = '${PriceHelper.formatPriceToBrazilianFormat(split[0])},${split[1]}';
+      _dateController.text = DateFormat('dd/MM/yyyy').format(widget.finance!.date);
+    }
+
     _nameFocusNode.requestFocus();
   }
 
@@ -69,9 +100,10 @@ class _FinanceFormModalState extends State<FinanceFormModal> {
   Widget build(BuildContext context) => ValueListenableBuilder(
         valueListenable: _showMessage,
         builder: (context, showMessage, child) => BaseModal(
-          size: Size(300, !showMessage ? 250 : 296),
+          size: Size(300, !showMessage ? 260 : 306),
           showFooterButtons: true,
-          yesOnTap: () => _createFinance(),
+          yesText: widget.finance != null ? 'Update' : 'Confirm',
+          yesOnTap: () => widget.finance != null ? _updateFinance() : _createFinance(),
           title: 'Add Finance',
           content: Column(
             children: [

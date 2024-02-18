@@ -14,6 +14,9 @@ class IconTextHoverButton extends StatefulWidget {
   /// Size of [Icon]
   final double? iconSize;
 
+  /// Padding of the content
+  final EdgeInsets padding;
+
   /// If [IconTextHoverButton] has a rounded border around it
   final bool bordered;
 
@@ -24,6 +27,7 @@ class IconTextHoverButton extends StatefulWidget {
     this.icon,
     this.iconSize,
     this.bordered = false,
+    this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
   }) {
     assert(text != null || (icon != null && iconSize != null));
   }
@@ -50,6 +54,9 @@ class _IconTextHoverButtonState extends State<IconTextHoverButton> {
       builder: (context, hovered, child) => InkWell(
         onTap: () => widget.onTap(),
         onHover: (value) => _hovered.value = value,
+        hoverColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         child: Container(
           decoration: BoxDecoration(
             color: !hovered ? Colors.transparent : theme.colorScheme.onPrimary,
@@ -60,7 +67,7 @@ class _IconTextHoverButtonState extends State<IconTextHoverButton> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            padding: widget.padding,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

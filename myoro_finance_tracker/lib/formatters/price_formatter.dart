@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:myoro_finance_tracker/helpers/price_helper.dart';
 
 /// [TextInputFormatter] for prices (currently only the brazilian format)
 ///
@@ -16,37 +17,6 @@ import 'package:flutter/services.dart';
 /// 123.456,78
 /// 1.234.567,89
 class PriceFormatter extends TextInputFormatter {
-  /// i.e. 00,12 --> 0,12
-  /// i.e. 1234,56 --> 1.234,56
-  String _trimZeroesAndPlaceDots(String text) {
-    while (true) {
-      if (text[0] == '0' && text.length != 1) {
-        text = text.substring(1);
-      } else {
-        break;
-      }
-    }
-
-    if (text.length > 3) {
-      String result = '';
-
-      final int remainder = text.length % 3;
-      for (int i = 0; i < remainder; i++) {
-        result += text[0];
-        text = text.substring(1);
-      }
-
-      while (text.isNotEmpty) {
-        result += '${result.isNotEmpty ? '.' : ''}${text.substring(0, 3)}';
-        text = text.substring(3);
-      }
-
-      return result;
-    } else {
-      return text;
-    }
-  }
-
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (!RegExp(r'^[0-9]').hasMatch(newValue.text)) return oldValue;
@@ -69,7 +39,8 @@ class PriceFormatter extends TextInputFormatter {
       // Normal case
       final List<String> split = oldValue.text.split(',');
       return TextEditingValue(
-        text: '${_trimZeroesAndPlaceDots('${split[0].replaceAll('.', '')}${split[1][0]}')},${split[1][1]}${newValue.text[newValue.text.length - 1]}',
+        text:
+            '${PriceHelper.formatPriceToBrazilianFormat('${split[0].replaceAll('.', '')}${split[1][0]}')},${split[1][1]}${newValue.text[newValue.text.length - 1]}',
       );
     }
     // Removing numbers
@@ -83,7 +54,7 @@ class PriceFormatter extends TextInputFormatter {
       final List<String> split = oldValue.text.split(',');
       final String newLHS = split[0].substring(0, split[0].length - 1);
       return TextEditingValue(
-        text: '${_trimZeroesAndPlaceDots(newLHS.isEmpty ? '0' : newLHS)},${split[0][split[0].length - 1]}${split[1][0]}',
+        text: '${PriceHelper.formatPriceToBrazilianFormat(newLHS.isEmpty ? '0' : newLHS)},${split[0][split[0].length - 1]}${split[1][0]}',
       );
     }
   }

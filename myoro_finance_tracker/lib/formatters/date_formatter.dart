@@ -5,8 +5,9 @@ class DateFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.text.isEmpty) return newValue;
 
-    if (!RegExp(r'^[0-9]').hasMatch(newValue.text) || (newValue.text.length > oldValue.text.length && newValue.text[newValue.text.length - 1] == '/'))
+    if (!RegExp(r'^[0-9]').hasMatch(newValue.text) || (newValue.text.length > oldValue.text.length && newValue.text[newValue.text.length - 1] == '/')) {
       return oldValue;
+    }
 
     if ((newValue.text.length == 2 || newValue.text.length == 5) && newValue.text.length > oldValue.text.length) {
       return TextEditingValue(

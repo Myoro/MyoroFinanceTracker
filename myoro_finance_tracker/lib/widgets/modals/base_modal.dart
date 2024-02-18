@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myoro_finance_tracker/widgets/buttons/icon_button_without_feedback.dart';
 import 'package:myoro_finance_tracker/widgets/buttons/icon_text_hover_button.dart';
 
 /// [Widget] that all modal [Widget]s (a.k.a every file in this folder) will derive from
@@ -68,13 +67,15 @@ class BaseModal extends StatelessWidget {
                         style: theme.textTheme.titleMedium,
                       ),
                     const Spacer(),
-                    IconButtonWithoutFeedback(
+                    IconTextHoverButton(
                       icon: Icons.close,
-                      size: 26,
+                      iconSize: 26,
+                      padding: EdgeInsets.zero,
                       onTap: () => Navigator.pop(context),
                     ),
                   ],
                 ),
+                const SizedBox(height: 10),
                 content,
                 if (showFooterButtons) ...[
                   const SizedBox(height: 20),
