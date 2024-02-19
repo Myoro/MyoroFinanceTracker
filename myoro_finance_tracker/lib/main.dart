@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myoro_finance_tracker/blocs/dark_mode_cubit.dart';
 import 'package:myoro_finance_tracker/blocs/finances_cubit.dart';
+import 'package:myoro_finance_tracker/blocs/total_income_cubit.dart';
 import 'package:myoro_finance_tracker/database.dart';
 import 'package:myoro_finance_tracker/helpers/platform_helper.dart';
 import 'package:myoro_finance_tracker/models/finance_model.dart';
@@ -20,12 +21,14 @@ void main() async {
   await Database.init();
   final bool isDarkMode = (await Database.get('dark_mode'))['enabled'] == 1 ? true : false;
   final List<FinanceModel> finances = (await Database.select('finances')).map((finance) => FinanceModel.fromJSON(finance)).toList();
+  final double totalIncome = double.parse((await Database.get('total_income'))['income'] as String);
 
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => DarkModeCubit(isDarkMode)),
         BlocProvider(create: (context) => FinancesCubit(finances)),
+        BlocProvider(create: (context) => TotalIncomeCubit(totalIncome)),
       ],
       child: const App(),
     ),

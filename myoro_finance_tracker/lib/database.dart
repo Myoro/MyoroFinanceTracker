@@ -21,7 +21,7 @@ class Database {
     await _database.execute('CREATE TABLE IF NOT EXISTS dark_mode(id INTEGER PRIMARY KEY, enabled INTEGER);');
     if ((await get('dark_mode')).isEmpty) insert('dark_mode', {'enabled': 1});
 
-    // Finances cubit
+    // Finances
     await _database.execute('''
       CREATE TABLE IF NOT EXISTS finances(
         id    INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,6 +30,10 @@ class Database {
         date  TEXT
       );
     ''');
+
+    // Total income
+    await _database.execute('CREATE TABLE IF NOT EXISTS total_income(id INTEGER PRIMARY KEY, income TEXT);');
+    if ((await get('total_income')).isEmpty) insert('total_income', {'income': '0'});
   }
 
   static Future<List<Map<String, Object?>>> select(String table, [Map<String, dynamic>? conditions]) async {
