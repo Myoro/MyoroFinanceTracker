@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:myoro_finance_tracker/widgets/bodies/base_body.dart';
+import 'package:myoro_finance_tracker/widgets/cards/goals_card.dart';
 import 'package:myoro_finance_tracker/widgets/cards/timely_payments_card.dart';
 import 'package:myoro_finance_tracker/widgets/cards/total_income_card.dart';
 import 'package:myoro_finance_tracker/widgets/screens/income_screen.dart';
@@ -15,6 +16,8 @@ class IncomeScreenBody extends StatelessWidget {
             TotalIncomeCard(),
             SizedBox(height: 10),
             TimelyPaymentsCard(),
+            SizedBox(height: 10),
+            GoalsCard(),
           ],
         ),
       );
