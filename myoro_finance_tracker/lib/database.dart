@@ -34,6 +34,17 @@ class Database {
     // Total income
     await _database.execute('CREATE TABLE IF NOT EXISTS total_income(id INTEGER PRIMARY KEY, income TEXT);');
     if ((await get('total_income')).isEmpty) insert('total_income', {'income': '0'});
+
+    // Timely payments
+    await _database.execute('''
+      CREATE TABLE IF NOT EXISTS timely_payments(
+        id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+        name                TEXT,
+        date_paid           TEXT,
+        payment_frequency   TEXT,
+        paying_or_receiving TEXT
+      );
+    ''');
   }
 
   static Future<List<Map<String, Object?>>> select(String table, [Map<String, dynamic>? conditions]) async {

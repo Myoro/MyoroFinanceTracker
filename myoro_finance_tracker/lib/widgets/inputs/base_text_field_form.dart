@@ -26,6 +26,9 @@ class BaseTextFieldForm extends StatelessWidget {
   /// (Optional) Focus node of [TextField] in [BaseTextField]
   final FocusNode? focusNode;
 
+  /// (Optional) [TextStyle] of title
+  final TextStyle? titleTextStyle;
+
   /// [TextEditingController of [TextField] in [BaseTextField]
   final TextEditingController controller;
 
@@ -39,6 +42,7 @@ class BaseTextFieldForm extends StatelessWidget {
     this.focusNode,
     this.size = SizeEnum.medium,
     this.titleWidth,
+    this.titleTextStyle,
   });
 
   @override
@@ -53,7 +57,7 @@ class BaseTextFieldForm extends StatelessWidget {
               child: Text(
                 '$title:${obligatory ? ' *' : ''}',
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: titleTextStyle ?? Theme.of(context).textTheme.bodyMedium,
               ),
             ),
           ),

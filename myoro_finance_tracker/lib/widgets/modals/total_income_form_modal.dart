@@ -35,7 +35,7 @@ class _TotalIncomeFormModalState extends State<TotalIncomeFormModal> {
 
   @override
   Widget build(BuildContext context) => BaseModal(
-        size: const Size(300, 300),
+        size: const Size(300, 168),
         title: 'Update Total Income',
         showFooterButtons: true,
         yesOnTap: () => _updateTotalIncome(),
