@@ -11,13 +11,13 @@ import 'package:myoro_finance_tracker/widgets/modals/base_modal.dart';
 
 /// Modal to add goals (i.e. saving up for a car)
 class GoalFormModal extends StatefulWidget {
-  const GoalFormModal({ super.key });
+  const GoalFormModal({super.key});
 
   static void show(BuildContext context) => showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (context) => const GoalFormModal(),
-  );
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => const GoalFormModal(),
+      );
 
   @override
   State<GoalFormModal> createState() => _GoalFormModalState();
@@ -34,13 +34,9 @@ class _GoalFormModalState extends State<GoalFormModal> {
   final ValueNotifier<bool> _showMessage = ValueNotifier<bool>(false);
 
   void _createGoal() {
-    if(
-      _goalAmountController.text.isEmpty
-      ||
-      _finishDateController.text.length < 10
-      ||
-      DateFormat('dd/MM/yyyy').parse(_finishDateController.text).isBefore(DateTime.now())
-    ) {
+    if (_goalAmountController.text.isEmpty ||
+        _finishDateController.text.length < 10 ||
+        DateFormat('dd/MM/yyyy').parse(_finishDateController.text).isBefore(DateTime.now())) {
       _showMessage.value = true;
       Future.delayed(const Duration(milliseconds: 1500), () => _showMessage.value = false);
       return;
@@ -68,47 +64,47 @@ class _GoalFormModalState extends State<GoalFormModal> {
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
-    valueListenable: _showMessage,
-    builder: (context, showMessage, child) => BaseModal(
-      title: 'Add a Goal',
-      showFooterButtons: true,
-      yesText: 'Create',
-      yesOnTap: () => _createGoal(),
-      size: Size(350, !showMessage ? 280 : 326),
-      content: Column(
-        children: [
-          BaseTextFieldForm(
-            controller: _nameController,
-            title: 'Goal Name',
-            titleWidth: _titleWidth,
-            textFieldWidth: _textFieldWidth,
+        valueListenable: _showMessage,
+        builder: (context, showMessage, child) => BaseModal(
+          title: 'Add a Goal',
+          showFooterButtons: true,
+          yesText: 'Create',
+          yesOnTap: () => _createGoal(),
+          size: Size(350, !showMessage ? 280 : 326),
+          content: Column(
+            children: [
+              BaseTextFieldForm(
+                controller: _nameController,
+                title: 'Goal Name',
+                titleWidth: _titleWidth,
+                textFieldWidth: _textFieldWidth,
+              ),
+              const SizedBox(height: 10),
+              BaseTextFieldForm(
+                controller: _goalAmountController,
+                formatters: [PriceFormatter()],
+                title: 'Amount to Save',
+                obligatory: true,
+                titleWidth: _titleWidth,
+                textFieldWidth: _textFieldWidth,
+              ),
+              const SizedBox(height: 10),
+              BaseTextFieldForm(
+                controller: _finishDateController,
+                formatters: [DateFormatter()],
+                title: 'Finish Date',
+                titleWidth: _titleWidth,
+                textFieldWidth: _textFieldWidth,
+              ),
+              if (showMessage) ...[
+                const SizedBox(height: 15),
+                Text(
+                  'Form Incomplete',
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
+              ],
+            ],
           ),
-          const SizedBox(height: 10),
-          BaseTextFieldForm(
-            controller: _goalAmountController,
-            formatters: [PriceFormatter()],
-            title: 'Amount to Save',
-            obligatory: true,
-            titleWidth: _titleWidth,
-            textFieldWidth: _textFieldWidth,
-          ),
-          const SizedBox(height: 10),
-          BaseTextFieldForm(
-            controller: _finishDateController,
-            formatters: [DateFormatter()],
-            title: 'Finish Date',
-            titleWidth: _titleWidth,
-            textFieldWidth: _textFieldWidth,
-          ),
-          if(showMessage)...[
-            const SizedBox(height: 15),
-            Text(
-              'Form Incomplete',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 }

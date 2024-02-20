@@ -108,7 +108,8 @@ class _TimelyPayment extends StatelessWidget {
               const SizedBox(height: 10),
               FormOutput(
                 title: 'Amount Spent',
-                output: '\$${PriceHelper.formatPriceToBrazilianFormat(timelyPayment.spent.toStringAsFixed(2).split('.')[0])},${timelyPayment.spent.toStringAsFixed(2).split('.')[1]}',
+                output:
+                    '\$${PriceHelper.formatPriceToBrazilianFormat(timelyPayment.spent.toStringAsFixed(2).split('.')[0])},${timelyPayment.spent.toStringAsFixed(2).split('.')[1]}',
               ),
               const SizedBox(height: 5),
               FormOutput(

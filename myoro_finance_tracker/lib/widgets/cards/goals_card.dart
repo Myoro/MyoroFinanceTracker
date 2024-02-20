@@ -24,66 +24,67 @@ class GoalsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<GoalsCubit, List<GoalModel>>(
-    builder: (context, goals) => BaseCard(
-      width: 350,
-      content: Column(
-        children: [
-          if(goals.isNotEmpty)...[
-            Text('Goals', style: Theme.of(context).textTheme.titleMedium),
-            for(final GoalModel goal in goals)...[
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Row(
+        builder: (context, goals) => BaseCard(
+          width: 350,
+          content: Column(
+            children: [
+              if (goals.isNotEmpty) ...[
+                Text('Goals', style: Theme.of(context).textTheme.titleMedium),
+                for (final GoalModel goal in goals) ...[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Column(
                         children: [
-                          Text(
-                            goal.name ?? 'No Name',
-                            style: Theme.of(context).textTheme.titleLarge,
+                          Row(
+                            children: [
+                              Text(
+                                goal.name ?? 'No Name',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              const Spacer(),
+                              IconTextHoverButton(
+                                onTap: () => ConfirmationModal.show(
+                                  context,
+                                  size: const Size(300, 180),
+                                  title: 'Delete Goal',
+                                  message: 'Are you sure you want to delete ${goal.name ?? 'this payment'}?',
+                                  yesOnTap: () => _deleteGoal(context, goal),
+                                ),
+                                icon: Icons.delete,
+                                iconSize: 25,
+                              ),
+                            ],
                           ),
-                          const Spacer(),
-                          IconTextHoverButton(
-                            onTap: () => ConfirmationModal.show(
-                              context,
-                              size: const Size(300, 180),
-                              title: 'Delete Goal',
-                              message: 'Are you sure you want to delete ${goal.name ?? 'this payment'}?',
-                              yesOnTap: () => _deleteGoal(context, goal),
-                            ),
-                            icon: Icons.delete,
-                            iconSize: 25,
+                          const SizedBox(height: 5),
+                          FormOutput(
+                            title: 'Amount to Save',
+                            output:
+                                '\$${PriceHelper.formatPriceToBrazilianFormat(goal.goalAmount.toStringAsFixed(2).split('.')[0])},${goal.goalAmount.toStringAsFixed(2).split('.')[1]}',
+                          ),
+                          const SizedBox(height: 5),
+                          FormOutput(
+                            title: 'Date to Reach Goal',
+                            output: DateFormat('dd/MM/yyyy').format(goal.finishDate),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 5),
-                      FormOutput(
-                        title: 'Amount to Save',
-                        output: '\$${PriceHelper.formatPriceToBrazilianFormat(goal.goalAmount.toStringAsFixed(2).split('.')[0])},${goal.goalAmount.toStringAsFixed(2).split('.')[1]}',
-                      ),
-                      const SizedBox(height: 5),
-                      FormOutput(
-                        title: 'Date to Reach Goal',
-                        output: DateFormat('dd/MM/yyyy').format(goal.finishDate),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 10),
+                ],
+                const SizedBox(height: 10),
+              ],
+              IconTextHoverButton(
+                onTap: () => GoalFormModal.show(context),
+                text: 'Add Goal',
               ),
-              const SizedBox(height: 10),
             ],
-            const SizedBox(height: 10),
-          ],
-          IconTextHoverButton(
-            onTap: () => GoalFormModal.show(context),
-            text: 'Add Goal',
           ),
-        ],
-      ),
-    ),
-  );
+        ),
+      );
 }
