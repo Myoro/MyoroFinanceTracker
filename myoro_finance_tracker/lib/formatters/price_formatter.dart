@@ -52,7 +52,7 @@ class PriceFormatter extends TextInputFormatter {
 
       // Normal case
       final List<String> split = oldValue.text.split(',');
-      final String newLHS = split[0].substring(0, split[0].length - 1);
+      final String newLHS = split[0].substring(0, split[0].length - 1).replaceAll('.', '');
       return TextEditingValue(
         text: '${PriceHelper.formatPriceToBrazilianFormat(newLHS.isEmpty ? '0' : newLHS)},${split[0][split[0].length - 1]}${split[1][0]}',
       );

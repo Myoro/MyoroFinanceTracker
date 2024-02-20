@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myoro_finance_tracker/blocs/dark_mode_cubit.dart';
@@ -7,7 +8,7 @@ import 'package:myoro_finance_tracker/blocs/total_income_cubit.dart';
 import 'package:myoro_finance_tracker/database.dart';
 import 'package:myoro_finance_tracker/helpers/platform_helper.dart';
 import 'package:myoro_finance_tracker/models/finance_model.dart';
-import 'package:myoro_finance_tracker/models/timely_payment.dart';
+import 'package:myoro_finance_tracker/models/timely_payment_model.dart';
 import 'package:myoro_finance_tracker/theme.dart';
 import 'package:myoro_finance_tracker/widgets/screens/home_screen.dart';
 import 'package:window_manager/window_manager.dart';
@@ -20,11 +21,12 @@ void main() async {
     windowManager.setMinimumSize(const Size(350, 400));
   }
 
+  if (kDebugMode) await Database.reset();
   await Database.init();
   final bool isDarkMode = (await Database.get('dark_mode'))['enabled'] == 1 ? true : false;
   final List<FinanceModel> finances = (await Database.select('finances')).map((finance) => FinanceModel.fromJSON(finance)).toList();
   final double totalIncome = double.parse((await Database.get('total_income'))['income'] as String);
-  final List<TimelyPayment> timelyPayments = (await Database.select('timely_payments')).map((item) => TimelyPayment.fromJSON(item)).toList();
+  final List<TimelyPaymentModel> timelyPayments = (await Database.select('timely_payments')).map((item) => TimelyPaymentModel.fromJSON(item)).toList();
 
   runApp(
     MultiBlocProvider(

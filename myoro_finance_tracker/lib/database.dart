@@ -1,4 +1,8 @@
+import 'package:intl/intl.dart';
+import 'package:myoro_finance_tracker/enums/paying_or_receiving_enum.dart';
+import 'package:myoro_finance_tracker/enums/payment_frequency_enum.dart';
 import 'package:myoro_finance_tracker/helpers/platform_helper.dart';
+import 'package:myoro_finance_tracker/models/timely_payment_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart' as sqflite;
@@ -40,11 +44,64 @@ class Database {
       CREATE TABLE IF NOT EXISTS timely_payments(
         id                  INTEGER PRIMARY KEY AUTOINCREMENT,
         name                TEXT,
+        spent               TEXT,
         date_paid           TEXT,
         payment_frequency   TEXT,
         paying_or_receiving TEXT
       );
     ''');
+    // Checking if any payments are due
+    final List<TimelyPaymentModel> timelyPayments = (await select('timely_payments')).map((json) => TimelyPaymentModel.fromJSON(json)).toList();
+    for (final TimelyPaymentModel timelyPayment in timelyPayments) {
+      if (timelyPayment.datePaid.isBefore(DateTime.now())) {
+        if (timelyPayment.payingOrReceiving == PayingOrReceivingEnum.paying) {
+          await update(
+            'total_income',
+            {
+              'income': double.parse((await get('total_income'))['income'] as String) - timelyPayment.spent,
+            },
+          );
+        } else {
+          await update(
+            'total_income',
+            {
+              'income': double.parse((await get('total_income'))['income'] as String) + timelyPayment.spent,
+            },
+          );
+        }
+
+        late final String data;
+        switch (timelyPayment.paymentFrequency) {
+          case PaymentFrequencyEnum.daily:
+            data = DateFormat('dd/MM/yyyy').format(timelyPayment.datePaid.add(const Duration(days: 1)));
+            break;
+          case PaymentFrequencyEnum.weekly:
+            data = DateFormat('dd/MM/yyyy').format(timelyPayment.datePaid.add(const Duration(days: 7)));
+            break;
+          case PaymentFrequencyEnum.monthly:
+            data = DateFormat('dd/MM/yyyy').format(
+              DateTime(timelyPayment.datePaid.year, timelyPayment.datePaid.month + 1, timelyPayment.datePaid.day),
+            );
+            break;
+          case PaymentFrequencyEnum.yearly:
+            data = DateFormat('dd/MM/yyyy').format(
+              DateTime(timelyPayment.datePaid.year + 1, timelyPayment.datePaid.month, timelyPayment.datePaid.day),
+            );
+            break;
+        }
+
+        await update(
+          'timely_payments',
+          {'date_paid': data},
+          timelyPayment.toJSON,
+        );
+      }
+    }
+  }
+
+  static Future<void> reset() async {
+    if (PlatformHelper.isDesktop) sqflite.databaseFactory = databaseFactoryFfi;
+    await sqflite.deleteDatabase(await getDatabasePath());
   }
 
   static Future<List<Map<String, Object?>>> select(String table, [Map<String, dynamic>? conditions]) async {
