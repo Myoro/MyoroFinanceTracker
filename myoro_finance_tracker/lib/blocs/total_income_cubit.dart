@@ -8,4 +8,9 @@ class TotalIncomeCubit extends Cubit<double> {
     await Database.update('total_income', {'income': totalIncome.toStringAsFixed(2)});
     emit(totalIncome);
   }
+
+  void update(double payment) async {
+    await Database.update('total_income', { 'income': (state - payment).toStringAsFixed(2) });
+    emit(state - payment);
+  }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myoro_finance_tracker/widgets/buttons/button_without_feedback.dart';
 import 'package:myoro_finance_tracker/widgets/buttons/icon_button_without_feedback.dart';
 
 /// [Widget] in which all tables will be created from
@@ -124,25 +123,16 @@ class _TitleColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
 
-    return ButtonWithoutFeedback(
-      onTap: () {}, // TODO: Filter
-      child: Wrap(
-        spacing: 5,
-        alignment: WrapAlignment.center,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        children: [
-          Text(
-            text,
-            style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.primary),
-          ),
-          if (text.isNotEmpty)
-            Icon(
-              Icons.filter_alt,
-              size: 20,
-              color: theme.colorScheme.primary,
-            ),
-        ],
-      ),
+    return Wrap(
+      spacing: 5,
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        Text(
+          text,
+          style: theme.textTheme.bodyMedium!.copyWith(color: theme.colorScheme.primary),
+        ),
+      ],
     );
   }
 }

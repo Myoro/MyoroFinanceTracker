@@ -54,7 +54,6 @@ class _TotalIncomeCardState extends State<TotalIncomeCard> {
               IconTextHoverButton(
                 onTap: () => TotalIncomeFormModal.show(context),
                 text: 'Update Total Income',
-                bordered: true,
               )
             ],
           ),

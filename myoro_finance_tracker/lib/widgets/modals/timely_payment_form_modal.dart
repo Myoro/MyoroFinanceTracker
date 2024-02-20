@@ -91,7 +91,7 @@ class _TimelyPaymentFormModalState extends State<TimelyPaymentFormModal> {
         content: Column(
           children: [
             BaseDropdownForm(
-              title: 'Paying or Receiving?',
+              title: 'Paying/Receiving?',
               titleWidth: titleWidth,
               titleTextStyle: bodySmall,
               dropdownWidth: inputWidth,

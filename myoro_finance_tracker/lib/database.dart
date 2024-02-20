@@ -35,6 +35,16 @@ class Database {
       );
     ''');
 
+    // Goals
+    await _database.execute('''
+      CREATE TABLE IF NOT EXISTS goals(
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        name        TEXT,
+        goal_amount TEXT,
+        finish_date TEXT
+      );
+    ''');
+
     // Total income
     await _database.execute('CREATE TABLE IF NOT EXISTS total_income(id INTEGER PRIMARY KEY, income TEXT);');
     if ((await get('total_income')).isEmpty) insert('total_income', {'income': '0'});

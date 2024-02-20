@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:myoro_finance_tracker/blocs/finances_cubit.dart';
+import 'package:myoro_finance_tracker/blocs/total_income_cubit.dart';
 import 'package:myoro_finance_tracker/formatters/date_formatter.dart';
 import 'package:myoro_finance_tracker/formatters/price_formatter.dart';
 import 'package:myoro_finance_tracker/helpers/price_helper.dart';
@@ -55,6 +56,8 @@ class _FinanceFormModalState extends State<FinanceFormModal> {
         date: _dateController.text.length < 10 ? DateTime.now() : DateFormat('dd/MM/yyyy').parse(_dateController.text),
       ),
     );
+
+    BlocProvider.of<TotalIncomeCubit>(context).update(double.parse(_spentController.text));
 
     Navigator.pop(context);
   }
