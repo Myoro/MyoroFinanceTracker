@@ -20,6 +20,7 @@ class TotalIncomeFormModal extends StatefulWidget {
 
 class _TotalIncomeFormModalState extends State<TotalIncomeFormModal> {
   final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
 
   void _updateTotalIncome() {
     if (_controller.text.isEmpty) return;
@@ -28,8 +29,15 @@ class _TotalIncomeFormModalState extends State<TotalIncomeFormModal> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _focusNode.dispose();
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -42,6 +50,7 @@ class _TotalIncomeFormModalState extends State<TotalIncomeFormModal> {
         content: BaseTextField(
           width: 250,
           controller: _controller,
+          focusNode: _focusNode,
           formatters: [PriceFormatter()],
         ),
       );

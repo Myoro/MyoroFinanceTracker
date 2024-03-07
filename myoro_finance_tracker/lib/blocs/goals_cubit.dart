@@ -7,8 +7,7 @@ class GoalsCubit extends Cubit<List<GoalModel>> {
 
   void add(GoalModel goal) async {
     await Database.insert('goals', goal.toJSON);
-    final GoalModel result = GoalModel.fromJSON(await Database.get('goals', goal.toJSON));
-    emit(state..add(result));
+    emit(state..add(goal));
   }
 
   void remove(GoalModel goal) async {

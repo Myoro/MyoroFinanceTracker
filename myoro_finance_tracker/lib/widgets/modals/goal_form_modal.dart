@@ -30,13 +30,21 @@ class _GoalFormModalState extends State<GoalFormModal> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _goalAmountController = TextEditingController();
   final TextEditingController _finishDateController = TextEditingController();
-
+  final FocusNode _nameFocusNode = FocusNode();
   final ValueNotifier<bool> _showMessage = ValueNotifier<bool>(false);
 
   void _createGoal() {
-    if (_goalAmountController.text.isEmpty ||
-        _finishDateController.text.length < 10 ||
-        DateFormat('dd/MM/yyyy').parse(_finishDateController.text).isBefore(DateTime.now())) {
+    if (
+      _nameController.text.isEmpty
+      ||
+      _goalAmountController.text.isEmpty
+      ||
+      (
+        _finishDateController.text.length == 10
+        &&
+        DateFormat('dd/MM/yyyy').parse(_finishDateController.text).isBefore(DateTime.now())
+      )
+    ) {
       _showMessage.value = true;
       Future.delayed(const Duration(milliseconds: 1500), () => _showMessage.value = false);
       return;
@@ -46,7 +54,7 @@ class _GoalFormModalState extends State<GoalFormModal> {
       GoalModel(
         name: _nameController.text,
         goalAmount: PriceHelper.formatPriceToDouble(_goalAmountController.text),
-        finishDate: DateFormat('dd/MM/yyyy').parse(_finishDateController.text),
+        finishDate: _finishDateController.text.length > 10 ? DateFormat('dd/MM/yyyy').parse(_finishDateController.text) : null,
       ),
     );
 
@@ -54,10 +62,17 @@ class _GoalFormModalState extends State<GoalFormModal> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _nameFocusNode.requestFocus();
+  }
+
+  @override
   void dispose() {
     _nameController.dispose();
     _goalAmountController.dispose();
     _finishDateController.dispose();
+    _nameFocusNode.dispose();
     _showMessage.dispose();
     super.dispose();
   }
@@ -75,7 +90,9 @@ class _GoalFormModalState extends State<GoalFormModal> {
             children: [
               BaseTextFieldForm(
                 controller: _nameController,
+                focusNode: _nameFocusNode,
                 title: 'Goal Name',
+                obligatory: true,
                 titleWidth: _titleWidth,
                 textFieldWidth: _textFieldWidth,
               ),
