@@ -34,17 +34,9 @@ class _GoalFormModalState extends State<GoalFormModal> {
   final ValueNotifier<bool> _showMessage = ValueNotifier<bool>(false);
 
   void _createGoal() {
-    if (
-      _nameController.text.isEmpty
-      ||
-      _goalAmountController.text.isEmpty
-      ||
-      (
-        _finishDateController.text.length == 10
-        &&
-        DateFormat('dd/MM/yyyy').parse(_finishDateController.text).isBefore(DateTime.now())
-      )
-    ) {
+    if (_nameController.text.isEmpty ||
+        _goalAmountController.text.isEmpty ||
+        (_finishDateController.text.length == 10 && DateFormat('dd/MM/yyyy').parse(_finishDateController.text).isBefore(DateTime.now()))) {
       _showMessage.value = true;
       Future.delayed(const Duration(milliseconds: 1500), () => _showMessage.value = false);
       return;

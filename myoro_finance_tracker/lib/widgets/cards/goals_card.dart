@@ -67,7 +67,7 @@ class GoalsCard extends StatelessWidget {
                                 '\$${PriceHelper.formatPriceToBrazilianFormat(goal.goalAmount.toStringAsFixed(2).split('.')[0])},${goal.goalAmount.toStringAsFixed(2).split('.')[1]}',
                           ),
                           const SizedBox(height: 5),
-                          if(goal.finishDate != null)
+                          if (goal.finishDate != null)
                             FormOutput(
                               title: 'Date to Reach Goal',
                               output: DateFormat('dd/MM/yyyy').format(goal.finishDate!),
