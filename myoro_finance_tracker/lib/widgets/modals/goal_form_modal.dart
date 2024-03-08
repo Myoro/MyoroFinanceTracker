@@ -31,26 +31,29 @@ class _GoalFormModalState extends State<GoalFormModal> {
   final TextEditingController _goalAmountController = TextEditingController();
   final TextEditingController _finishDateController = TextEditingController();
   final FocusNode _nameFocusNode = FocusNode();
-  final ValueNotifier<bool> _showMessage = ValueNotifier<bool>(false);
+  final ValueNotifier<String?> _errorMessage = ValueNotifier<String?>(null);
 
   void _createGoal() {
-    if (_nameController.text.isEmpty ||
-        _goalAmountController.text.isEmpty ||
-        (_finishDateController.text.length == 10 && DateFormat('dd/MM/yyyy').parse(_finishDateController.text).isBefore(DateTime.now()))) {
-      _showMessage.value = true;
-      Future.delayed(const Duration(milliseconds: 1500), () => _showMessage.value = false);
-      return;
+    if (_nameController.text.isEmpty) {
+      _errorMessage.value = 'Name cannot be empty';
+      Future.delayed(const Duration(milliseconds: 1500), () => _errorMessage.value = null);
+    } else if (_goalAmountController.text.isEmpty) {
+      _errorMessage.value = 'Amount cannot be empty';
+      Future.delayed(const Duration(milliseconds: 1500), () => _errorMessage.value = null);
+    } else if (_finishDateController.text.length == 10 && DateFormat('dd/MM/yyyy').parse(_finishDateController.text).isBefore(DateTime.now())) {
+      _errorMessage.value = 'Date must be empty or valid';
+      Future.delayed(const Duration(milliseconds: 1500), () => _errorMessage.value = null);
+    } else {
+      BlocProvider.of<GoalsCubit>(context).add(
+        GoalModel(
+          name: _nameController.text,
+          goalAmount: PriceHelper.formatPriceToDouble(_goalAmountController.text),
+          finishDate: _finishDateController.text.length == 10 ? DateFormat('dd/MM/yyyy').parse(_finishDateController.text) : null,
+        ),
+      );
+
+      Navigator.pop(context);
     }
-
-    BlocProvider.of<GoalsCubit>(context).add(
-      GoalModel(
-        name: _nameController.text,
-        goalAmount: PriceHelper.formatPriceToDouble(_goalAmountController.text),
-        finishDate: _finishDateController.text.length > 10 ? DateFormat('dd/MM/yyyy').parse(_finishDateController.text) : null,
-      ),
-    );
-
-    Navigator.pop(context);
   }
 
   @override
@@ -65,19 +68,19 @@ class _GoalFormModalState extends State<GoalFormModal> {
     _goalAmountController.dispose();
     _finishDateController.dispose();
     _nameFocusNode.dispose();
-    _showMessage.dispose();
+    _errorMessage.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) => ValueListenableBuilder(
-        valueListenable: _showMessage,
-        builder: (context, showMessage, child) => BaseModal(
+        valueListenable: _errorMessage,
+        builder: (context, errorMessage, child) => BaseModal(
           title: 'Add a Goal',
           showFooterButtons: true,
           yesText: 'Create',
           yesOnTap: () => _createGoal(),
-          size: Size(350, !showMessage ? 280 : 326),
+          size: Size(350, errorMessage == null ? 280 : 326),
           content: Column(
             children: [
               BaseTextFieldForm(
@@ -105,10 +108,10 @@ class _GoalFormModalState extends State<GoalFormModal> {
                 titleWidth: _titleWidth,
                 textFieldWidth: _textFieldWidth,
               ),
-              if (showMessage) ...[
+              if (errorMessage != null) ...[
                 const SizedBox(height: 15),
                 Text(
-                  'Form Incomplete',
+                  errorMessage,
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
               ],

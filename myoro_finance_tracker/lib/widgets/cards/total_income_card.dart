@@ -29,7 +29,7 @@ class _TotalIncomeCardState extends State<TotalIncomeCard> {
   @override
   Widget build(BuildContext context) => BlocBuilder<TotalIncomeCubit, double>(
         builder: (context, totalIncome) => BaseCard(
-          width: 220,
+          width: 350,
           content: Column(
             children: [
               ValueListenableBuilder(
@@ -52,6 +52,7 @@ class _TotalIncomeCardState extends State<TotalIncomeCard> {
               ),
               const SizedBox(height: 10),
               IconTextHoverButton(
+                filled: true,
                 onTap: () => TotalIncomeFormModal.show(context),
                 text: 'Update Total Income',
               )

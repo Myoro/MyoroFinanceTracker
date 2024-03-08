@@ -14,9 +14,9 @@ class IncomeScreenBody extends StatelessWidget {
         child: Column(
           children: [
             TotalIncomeCard(),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             TimelyPaymentsCard(),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             GoalsCard(),
           ],
         ),

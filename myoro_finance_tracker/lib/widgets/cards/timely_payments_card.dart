@@ -51,6 +51,7 @@ class TimelyPaymentsCard extends StatelessWidget {
               const SizedBox(height: 10),
             ],
             IconTextHoverButton(
+              filled: true,
               text: 'Add Timely Payment',
               onTap: () => TimelyPaymentFormModal.show(context),
             ),

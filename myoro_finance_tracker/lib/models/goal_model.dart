@@ -19,7 +19,7 @@ class GoalModel {
   Map<String, Object?> get toJSON => {
         'name': name,
         'goal_amount': goalAmount,
-        'finish_date': finishDate != null ? DateFormat('dd/MM/yyyy').format(finishDate!) : null,
+        'finish_date': finishDate != null ? DateFormat('dd/MM/yyyy').format(finishDate!) : '',
       };
 
   @override

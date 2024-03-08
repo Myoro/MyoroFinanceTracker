@@ -19,16 +19,24 @@ class BaseCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 2,
+          color: colorScheme.onPrimary,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(5),
-          child: content,
-        ),
-      );
+        borderRadius: BorderRadius.circular(10),
+        color: colorScheme.onPrimary.withOpacity(0.1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: content,
+      ),
+    );
+  }
 }
