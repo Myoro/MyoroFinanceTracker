@@ -6,7 +6,7 @@ import 'package:myoro_finance_tracker/widgets/bodies/home_screen_body.dart';
 import 'package:myoro_finance_tracker/widgets/tables/finance_table.dart';
 
 import '../../base_test_widget.dart';
-import '../../finance_model_constants.dart';
+import '../../constants/finance_model_constants.dart';
 
 void main() {
   const String title = 'HomeScreenBody Widget Test';

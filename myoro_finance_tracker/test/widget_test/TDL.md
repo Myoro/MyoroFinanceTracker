@@ -1,5 +1,3 @@
-5. income_screen_body.dart
-6. button_without_feedback.dart
 7. icon_button_without_feedback.dart
 8. icon_text_hover_button.dart
 9. base_card.dart
