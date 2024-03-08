@@ -28,7 +28,7 @@ void main() {
       }),
       {
         'where': 'foo = ? AND foo_foo = ? AND fi_fi = ?',
-        'where_args': [ 5, 10, 'boo_boo' ],
+        'where_args': [5, 10, 'boo_boo'],
       },
     );
   });

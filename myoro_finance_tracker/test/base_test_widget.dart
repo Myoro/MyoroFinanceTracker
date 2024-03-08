@@ -18,7 +18,7 @@ class BaseTestWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     late final Widget widget;
 
-    switch(testType) {
+    switch (testType) {
       case TestTypeEnum.appBar:
         widget = MaterialApp(
           title: title,

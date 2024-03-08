@@ -9,22 +9,16 @@ void main() {
   const String title = 'HomeScreenAppBar Widget Test';
 
   testWidgets(title, (tester) async {
-    await tester.pumpWidget(
-      const BaseTestWidget(
-        title: title,
-        testType: TestTypeEnum.appBar,
-        child: HomeScreenAppBar(),
-      )
-    );
+    await tester.pumpWidget(const BaseTestWidget(
+      title: title,
+      testType: TestTypeEnum.appBar,
+      child: HomeScreenAppBar(),
+    ));
 
     expect(find.byType(HomeScreenAppBar), findsOneWidget);
     expect(
       find.byWidgetPredicate(
-        (widget) => (
-          widget is Text
-          &&
-          widget.data == 'MyoroFinanceTracker'
-        ),
+        (widget) => (widget is Text && widget.data == 'MyoroFinanceTracker'),
       ),
       findsOneWidget,
     );

@@ -20,11 +20,7 @@ void main() {
     expect(find.byType(IncomeScreenAppBar), findsOneWidget);
     expect(
       find.byWidgetPredicate(
-        (widget) => (
-          widget is IconButtonWithoutFeedback
-          &&
-          widget.icon == Icons.home
-        ),
+        (widget) => (widget is IconButtonWithoutFeedback && widget.icon == Icons.home),
       ),
       findsOneWidget,
     );
