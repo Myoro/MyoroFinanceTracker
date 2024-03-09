@@ -14,7 +14,7 @@ class GoalModel {
   GoalModel.fromJSON(Map<String, dynamic> json)
       : name = json['name'],
         goalAmount = double.parse(json['goal_amount']),
-        finishDate = json['finish_date'] != null ? DateFormat('dd/MM/yyyy').parse(json['finish_date']) : null;
+        finishDate = json['finish_date'] != null && json['finish_date'].isNotEmpty ? DateFormat('dd/MM/yyyy').parse(json['finish_date']) : null;
 
   Map<String, Object?> get toJSON => {
         'name': name,

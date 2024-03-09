@@ -1,6 +1,3 @@
-8. icon_text_hover_button.dart
-9. base_card.dart
-10. goals_card.dart
 11. timely_payments_card.dart
 12. total_income_card.dart
 13. base_dropdown_form.dart

@@ -18,8 +18,9 @@ class FormOutput extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 10,
       children: [
         Text(
           '$title:',
@@ -28,7 +29,6 @@ class FormOutput extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
         ),
-        const SizedBox(width: 10),
         Text(
           output,
           style: textTheme.bodySmall,

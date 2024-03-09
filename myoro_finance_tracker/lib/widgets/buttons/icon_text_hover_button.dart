@@ -26,9 +26,9 @@ class IconTextHoverButton extends StatefulWidget {
   IconTextHoverButton({
     super.key,
     required this.onTap,
-    this.text,
     this.icon,
     this.iconSize,
+    this.text,
     this.bordered = false,
     this.padding = const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
     this.filled = false,
@@ -52,16 +52,6 @@ class _IconTextHoverButtonState extends State<IconTextHoverButton> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-
-    Color textHoverColor() {
-      if (widget.filled) {
-        return theme.colorScheme.primary;
-      } else if (!_hovered.value) {
-        return theme.colorScheme.onPrimary;
-      } else {
-        return theme.colorScheme.primary;
-      }
-    }
 
     return ValueListenableBuilder(
       valueListenable: _hovered,

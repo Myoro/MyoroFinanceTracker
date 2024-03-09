@@ -64,44 +64,54 @@ class _Goal extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    goal.name ?? 'No Name',
-                    style: Theme.of(context).textTheme.titleLarge,
+          child: LayoutBuilder(
+            builder: (context, constraints) => Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: constraints.maxWidth,
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        goal.name ?? 'No Name',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      SizedBox(
+                        width: 39,
+                        height: 39,
+                        child: IconTextHoverButton(
+                          onTap: () => ConfirmationModal.show(
+                            context,
+                            size: const Size(300, 180),
+                            title: 'Delete Goal',
+                            message: 'Are you sure you want to delete ${goal.name ?? 'this payment'}?',
+                            yesOnTap: () => deleteGoal(context, goal),
+                          ),
+                          icon: Icons.delete,
+                          iconSize: 25,
+                        ),
+                      ),
+                    ],
                   ),
-                  const Spacer(),
-                  IconTextHoverButton(
-                    onTap: () => ConfirmationModal.show(
-                      context,
-                      size: const Size(300, 180),
-                      title: 'Delete Goal',
-                      message: 'Are you sure you want to delete ${goal.name ?? 'this payment'}?',
-                      yesOnTap: () => deleteGoal(context, goal),
-                    ),
-                    icon: Icons.delete,
-                    iconSize: 25,
+                ),
+                const LoadingBar(),
+                const SizedBox(height: 5),
+                FormOutput(
+                  title: 'Amount to Save',
+                  output:
+                      '\$${PriceHelper.formatPriceToBrazilianFormat(goal.goalAmount.toStringAsFixed(2).split('.')[0])},${goal.goalAmount.toStringAsFixed(2).split('.')[1]}',
+                ),
+                const SizedBox(height: 5),
+                if (goal.finishDate != null) ...[
+                  FormOutput(
+                    title: 'Date to Reach Goal',
+                    output: DateFormat('dd/MM/yyyy').format(goal.finishDate!),
                   ),
                 ],
-              ),
-              const LoadingBar(),
-              const SizedBox(height: 5),
-              FormOutput(
-                title: 'Amount to Save',
-                output:
-                    '\$${PriceHelper.formatPriceToBrazilianFormat(goal.goalAmount.toStringAsFixed(2).split('.')[0])},${goal.goalAmount.toStringAsFixed(2).split('.')[1]}',
-              ),
-              const SizedBox(height: 5),
-              if (goal.finishDate != null) ...[
-                FormOutput(
-                  title: 'Date to Reach Goal',
-                  output: DateFormat('dd/MM/yyyy').format(goal.finishDate!),
-                ),
               ],
-            ],
+            ),
           ),
         ),
       );
