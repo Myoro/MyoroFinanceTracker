@@ -1,0 +1,25 @@
+name: Widget & integration tests
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get MyoroFitness code
+        uses: actions/checkout@v3
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "beta"
+
+      - name: Display Flutter version
+        run: flutter --version
+
+      - name: Install Flutter dependencies
+        run: cd myoro_finance_tracker && flutter pub get
+
+      - name: Run tests
+        run: cd myoro_finance_tracker && flutter test test/widget_test
